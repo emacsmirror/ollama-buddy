@@ -122,6 +122,7 @@
 (declare-function ollama-buddy-annotate-apply-last-response "ollama-buddy-annotate")
 (declare-function ollama-buddy-annotate-directory "ollama-buddy-annotate")
 (declare-function ollama-buddy-annotate-directory-cancel "ollama-buddy-annotate")
+(declare-function ollama-buddy-opencode--fetch-usage "ollama-buddy-opencode")
 (declare-function ollama-buddy-curl--process-filter "ollama-buddy-curl")
 (declare-function ollama-buddy-curl--process-json-line "ollama-buddy-curl")
 (declare-function ollama-buddy-curl--handle-content "ollama-buddy-curl")
