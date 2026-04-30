@@ -977,7 +977,9 @@ to select from this list."
   "Session token for fetching Ollama cloud usage stats.
 This is the value of the `__Secure-session' cookie from ollama.com.
 To obtain it: sign in at https://ollama.com, open browser DevTools (F12),
-go to Application > Cookies > ollama.com, and copy the `__Secure-session' value."
+go to Application > Cookies > ollama.com, and copy the `__Secure-session' value.
+Note: this cookie can change when you re-authenticate. If usage stats
+stop appearing, re-copy the fresh cookie and update this variable."
   :type 'string
   :group 'ollama-buddy)
 

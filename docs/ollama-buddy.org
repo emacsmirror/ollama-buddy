@@ -4545,6 +4545,10 @@ Usage data is cached for 5 minutes (configurable via
 =M-x ollama-buddy-cloud-refresh-usage= or the “Refresh” button on the
 Model Management page to re-fetch.
 
+If usage stats stop appearing, the =__Secure-session= cookie may have
+changed. Re-copy the fresh value from your browser and update
+=ollama-buddy-cloud-session-token=.
+
 <<Configuration-3>>
 *** 16.8 Configuration [[#Configuration-3][¶]]
 :PROPERTIES:
