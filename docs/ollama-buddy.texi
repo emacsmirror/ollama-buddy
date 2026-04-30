@@ -3149,6 +3149,30 @@ If usage stats stop appearing, the @code{__Secure-session} cookie may
 have changed.  Re-copy the fresh value from your browser and update
 @code{ollama-buddy-cloud-session-token}.
 
+@node OpenCode Go
+@section OpenCode Go
+
+@code{ollama-buddy-opencode.el} provides integration with the OpenCode Go
+flat-rate subscription.
+
+@subsection OpenCode Go Usage Stats
+
+If @code{ollama-buddy-opencode} is loaded, the Model Management page
+(@code{C-c M}) can also display your Go subscription usage.  To enable
+this, you must set your unique workspace URL and your session cookie:
+
+@enumerate
+@item Set @code{ollama-buddy-opencode-usage-url} to your workspace Go page
+URL (e.g.@: @code{https://opencode.ai/workspace/wrk_.../go}).
+@item Sign in at @uref{https://opencode.ai} and copy the @code{auth}
+cookie value from browser DevTools (Application/Storage > Cookies).
+@item Set @code{ollama-buddy-opencode-session-token} to this value.
+@end enumerate
+
+Like Ollama Cloud, the OpenCode @code{auth} cookie may rotate upon
+re-authentication.  If usage stats stop appearing, re-copy the fresh
+value from your browser.
+
 @section Configuration
 
 @table @code

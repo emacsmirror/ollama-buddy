@@ -120,6 +120,71 @@ layer falls back to 4096 when this is nil."
   :type '(choice integer (const nil))
   :group 'ollama-buddy-opencode)
 
+(defcustom ollama-buddy-opencode-usage-url ""
+  "URL to fetch OpenCode Go usage stats.
+This is your unique workspace Go URL, e.g.:
+https://opencode.ai/workspace/wrk_.../go"
+  :type 'string
+  :group 'ollama-buddy-opencode)
+
+(defcustom ollama-buddy-opencode-session-token ""
+  "Session token for fetching OpenCode Go usage stats.
+This is the value of the `auth' cookie from opencode.ai.
+To obtain it: sign in at https://opencode.ai, open browser DevTools (F12),
+go to Application > Cookies > opencode.ai, and copy the `auth' value."
+  :type 'string
+  :group 'ollama-buddy-opencode)
+
+(defvar ollama-buddy-opencode--usage-cache nil
+  "Cached OpenCode usage data.")
+
+(defvar ollama-buddy-opencode--usage-cache-time nil
+  "Time when OpenCode usage was last fetched.")
+
+(defun ollama-buddy-opencode--fetch-usage ()
+  "Fetch OpenCode Go usage stats.
+Returns an alist with session, weekly, and monthly percentages."
+  (when (and (not (string-empty-p ollama-buddy-opencode-usage-url))
+             (not (string-empty-p ollama-buddy-opencode-session-token)))
+    ;; Return cached value if still fresh (5 mins)
+    (if (and ollama-buddy-opencode--usage-cache
+             ollama-buddy-opencode--usage-cache-time
+             (< (float-time (time-subtract (current-time)
+                                           ollama-buddy-opencode--usage-cache-time))
+                300))
+        ollama-buddy-opencode--usage-cache
+      ;; Fetch fresh data
+      (condition-case err
+          (let ((buf (generate-new-buffer " *opencode-usage*")))
+            (unwind-protect
+                (let ((exit-code
+                       (call-process
+                        ollama-buddy-curl-executable nil buf nil
+                        "-s"
+                        "-b" (concat "auth=" ollama-buddy-opencode-session-token)
+                        ollama-buddy-opencode-usage-url)))
+                  (when (zerop exit-code)
+                    (with-current-buffer buf
+                      (goto-char (point-min))
+                      ;; Find the script tag containing the JSON data
+                      (when (re-search-forward "rollingUsage:[^}]*usagePercent:\\([0-9]+\\)" nil t)
+                        (let ((rolling (match-string 1))
+                              weekly monthly)
+                          (when (re-search-forward "weeklyUsage:[^}]*usagePercent:\\([0-9]+\\)" nil t)
+                            (setq weekly (match-string 1)))
+                          (when (re-search-forward "monthlyUsage:[^}]*usagePercent:\\([0-9]+\\)" nil t)
+                            (setq monthly (match-string 1)))
+                          (let ((result `((session . ,(concat rolling "%"))
+                                          (weekly . ,(concat weekly "%"))
+                                          (monthly . ,(concat monthly "%")))))
+                            (setq ollama-buddy-opencode--usage-cache result
+                                  ollama-buddy-opencode--usage-cache-time (current-time))
+                            result))))))
+              (kill-buffer buf)))
+        (error
+         (message "Failed to fetch OpenCode usage: %s" (error-message-string err))
+         nil)))))
+
 (defun ollama-buddy-opencode--key ()
   "Return the OpenCode Go API key.
 Used as the `:api-key' thunk so a single `auth-source' update is

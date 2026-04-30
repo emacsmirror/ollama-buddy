@@ -11,15 +11,17 @@ project's main git repository: [[https://github.com/captainflasmr/ollama-buddy
 
 * Versions
 
-** <2026-04-29 Wed> *7.5.1*
+** <2026-04-30 Thu> *7.5.2*
 
-DeepSeek V4 Pro cloud model support.
+OpenCode Go usage tracking and Model Management reorganization.
 
 *** Features
 
-- *DeepSeek V4 Pro Cloud Model* -- Added =deepseek-v4-pro:cloud= to =ollama-buddy-cloud-models= (appears in =C-c m=).  Runs on Ollama's cloud infrastructure on the latest NVIDIA Blackwell hardware -- as a flagship Blackwell-hosted model it requires a paid Ollama cloud subscription.
+- *OpenCode Go usage tracking* -- Added =ollama-buddy-opencode-usage-url= and =ollama-buddy-opencode-session-token= to =ollama-buddy-opencode.el=.  When configured, it parses your unique workspace Go page to display rolling, weekly, and monthly usage percentages alongside Ollama Cloud stats.
+- *Usage section in Model Management* -- Reorganized the =*Ollama Models Management*= buffer (=C-c M=) to include a dedicated =* Usage= section at the top.  This section consolidates budget/usage pie charts for both Ollama Cloud and OpenCode Go, keeping them clearly separated from model selection.
+- *Cloud cookie lifecycle note* -- Updated documentation to note that both Ollama and OpenCode session cookies can rotate upon re-authentication, requiring a fresh copy from browser DevTools if usage stats stop appearing.
 
-** <2026-04-26 Sun> *7.5.0*
+** <2026-04-29 Wed> *7.5.1*
 
 OpenCode Go subscription integration.
 

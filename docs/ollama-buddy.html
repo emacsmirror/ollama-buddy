@@ -333,7 +333,11 @@ allowing you to leverage powerful large language models (LLMs) directly within y
     <li><a id="toc-Automatic-Manifest-Pulling" href="#Automatic-Manifest-Pulling">16.5 Automatic Manifest Pulling</a></li>
     <li><a id="toc-Cloud-Model-Indicator" href="#Cloud-Model-Indicator">16.6 Cloud Model Indicator</a></li>
     <li><a id="toc-Cloud-Usage-Stats" href="#Cloud-Usage-Stats">16.7 Cloud Usage Stats</a></li>
-    <li><a id="toc-Configuration-2" href="#Configuration-3">16.8 Configuration</a></li>
+    <li><a id="toc-OpenCode-Go" href="#OpenCode-Go">16.8 OpenCode Go</a>
+    <ul class="toc-numbered-mark">
+      <li><a id="toc-OpenCode-Go-Usage-Stats" href="#OpenCode-Go-Usage-Stats">16.8.1 OpenCode Go Usage Stats</a></li>
+    </ul></li>
+    <li><a id="toc-Configuration-2" href="#Configuration-3">16.9 Configuration</a></li>
   </ul></li>
   <li><a id="toc-Launching-External-Frontends" href="#Launching-External-Frontends">17 Launching External Frontends</a>
   <ul class="toc-numbered-mark">
@@ -4387,6 +4391,7 @@ server UI:
 <li><a href="#Automatic-Manifest-Pulling">Automatic Manifest Pulling</a></li>
 <li><a href="#Cloud-Model-Indicator">Cloud Model Indicator</a></li>
 <li><a href="#Cloud-Usage-Stats">Cloud Usage Stats</a></li>
+<li><a href="#OpenCode-Go">OpenCode Go</a></li>
 <li><a href="#Configuration-3">Configuration</a></li>
 </ul>
 <div class="section-level-extent" id="Overview-4">
@@ -4508,9 +4513,42 @@ Management page to re-fetch.
 have changed.  Re-copy the fresh value from your browser and update
 <code class="code">ollama-buddy-cloud-session-token</code>.
 </p>
+<hr>
+</div>
+<div class="section-level-extent" id="OpenCode-Go">
+<p class="nav-panel">
+<span class="nav-button"><span class="nav-label">Up: </span><span class="nav-link"><a href="#Ollama-Cloud-Models" rel="up">Ollama Cloud Models</a></span></span><span class="nav-button"> &nbsp; </span><span class="nav-button">[<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</span><span class="nav-button">[<a href="#Index" title="Index" rel="index">Index</a>]</span></p>
+<h3 class="section" id="OpenCode-Go-1"><span>16.8 OpenCode Go<a class="copiable-link" href="#OpenCode-Go-1"> &para;</a></span></h3>
+
+<p><code class="code">ollama-buddy-opencode.el</code> provides integration with the OpenCode Go
+flat-rate subscription.
+</p>
+<ul class="mini-toc">
+<li><a href="#OpenCode-Go-Usage-Stats">OpenCode Go Usage Stats</a></li>
+</ul>
+<div class="subsection-level-extent" id="OpenCode-Go-Usage-Stats">
+<h4 class="subsection"><span>16.8.1 OpenCode Go Usage Stats<a class="copiable-link" href="#OpenCode-Go-Usage-Stats"> &para;</a></span></h4>
+
+<p>If <code class="code">ollama-buddy-opencode</code> is loaded, the Model Management page
+(<code class="code">C-c M</code>) can also display your Go subscription usage.  To enable
+this, you must set your unique workspace URL and your session cookie:
+</p>
+<ol class="enumerate">
+<li> Set <code class="code">ollama-buddy-opencode-usage-url</code> to your workspace Go page
+URL (e.g. <code class="code">https://opencode.ai/workspace/wrk_.../go</code>).
+</li><li> Sign in at <a class="uref" href="https://opencode.ai">https://opencode.ai</a> and copy the <code class="code">auth</code>
+cookie value from browser DevTools (Application/Storage &gt; Cookies).
+</li><li> Set <code class="code">ollama-buddy-opencode-session-token</code> to this value.
+</li></ol>
+
+<p>Like Ollama Cloud, the OpenCode <code class="code">auth</code> cookie may rotate upon
+re-authentication.  If usage stats stop appearing, re-copy the fresh
+value from your browser.
+</p>
+</div>
 </div>
 <div class="section-level-extent" id="Configuration-3">
-<h3 class="section"><span>16.8 Configuration<a class="copiable-link" href="#Configuration-3"> &para;</a></span></h3>
+<h3 class="section"><span>16.9 Configuration<a class="copiable-link" href="#Configuration-3"> &para;</a></span></h3>
 
 <dl class="table">
 <dt><code class="code">ollama-buddy-cloud-models</code></dt>

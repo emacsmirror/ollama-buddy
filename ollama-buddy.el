@@ -5180,8 +5180,51 @@ Modifies the variable in place."
                         (ollama-buddy--unload-single-model ,model)
                         (run-with-timer 3 nil #'ollama-buddy-manage-models))
              'help-echo (format "Unload %s to free up resources" model))
-            (insert "\n"))
           (insert "\n"))
+          (insert "\n"))
+
+        ;; Usage section
+        (let* ((cloud-enabled (and ollama-buddy-cloud-models (not ollama-buddy-airplane-mode)))
+               (opencode-enabled (and (featurep 'ollama-buddy-opencode)
+                                      (not (string-empty-p (bound-and-true-p ollama-buddy-opencode-usage-url)))))
+               (ollama-usage (when (and cloud-enabled (not (eq ollama-buddy--cloud-auth-status 'not-authenticated)))
+                               (ollama-buddy--fetch-cloud-usage)))
+               (opencode-usage (when opencode-enabled (ollama-buddy-opencode--fetch-usage))))
+          (when (or cloud-enabled opencode-enabled)
+            (insert "* Usage\n\n")
+            ;; Ollama Cloud
+            (when cloud-enabled
+              (insert "** Ollama Cloud\n")
+              (cond
+               ((eq ollama-buddy--cloud-auth-status 'not-authenticated)
+                (insert "  *Not signed in* — use =C-c A= or =M-x ollama-buddy-cloud-signin=\n\n"))
+               (ollama-usage
+                (let ((session (alist-get 'session ollama-usage))
+                      (weekly (alist-get 'weekly ollama-usage))
+                      (session-reset (alist-get 'session-reset ollama-usage))
+                      (weekly-reset (alist-get 'weekly-reset ollama-usage)))
+                  (insert (format "  Session: %s %s" (ollama-buddy--cloud-usage-pie session 36) session))
+                  (when session-reset
+                    (insert (format " (%s)" (ollama-buddy--cloud-reset-time-string session-reset))))
+                  (insert (format "  |  Weekly: %s %s" (ollama-buddy--cloud-usage-pie weekly 36) weekly))
+                  (when weekly-reset
+                    (insert (format " (%s)" (ollama-buddy--cloud-reset-time-string weekly-reset))))
+                  (insert "\n\n")))
+               ((or (not (stringp ollama-buddy-cloud-session-token)) (string-empty-p ollama-buddy-cloud-session-token))
+                (insert "  (Set ollama-buddy-cloud-session-token for usage stats)\n\n"))))
+            ;; OpenCode Go
+            (when opencode-enabled
+              (insert "** OpenCode Go\n")
+              (if opencode-usage
+                  (let ((session (alist-get 'session opencode-usage))
+                        (weekly (alist-get 'weekly opencode-usage))
+                        (monthly (alist-get 'monthly opencode-usage)))
+                    (insert (format "  Session: %s %s" (ollama-buddy--cloud-usage-pie session 36) session))
+                    (insert (format "  |  Weekly: %s %s" (ollama-buddy--cloud-usage-pie weekly 36) weekly))
+                    (insert (format "  |  Monthly: %s %s" (ollama-buddy--cloud-usage-pie monthly 36) monthly))
+                    (insert "\n\n"))
+                (when (string-empty-p (bound-and-true-p ollama-buddy-opencode-session-token))
+                  (insert "  (Set ollama-buddy-opencode-session-token for usage stats)\n\n"))))))
 
         ;; Actions at bottom
         (insert "* Actions:\n\n")
@@ -5208,25 +5251,7 @@ Modifies the variable in place."
                    (not ollama-buddy-airplane-mode))
           (insert (format "** ☁ Cloud Models %s\n\n"
                           (ollama-buddy--cloud-auth-status-indicator)))
-          ;; Cloud usage stats
-          (if (eq ollama-buddy--cloud-auth-status 'not-authenticated)
-              (insert "  *Not signed in* — use =C-c A= or =M-x ollama-buddy-cloud-signin= to sign in\n\n")
-            (let ((usage (ollama-buddy--fetch-cloud-usage)))
-              (if usage
-                  (let ((session (alist-get 'session usage))
-                        (weekly (alist-get 'weekly usage))
-                        (session-reset (alist-get 'session-reset usage))
-                        (weekly-reset (alist-get 'weekly-reset usage)))
-                    (insert (format "Session: %s %s" (ollama-buddy--cloud-usage-pie session 36) session))
-                    (when session-reset
-                      (insert (format " (%s)" (ollama-buddy--cloud-reset-time-string session-reset))))
-                    (insert (format "  |  Weekly: %s %s" (ollama-buddy--cloud-usage-pie weekly 36) weekly))
-                    (when weekly-reset
-                      (insert (format " (%s)" (ollama-buddy--cloud-reset-time-string weekly-reset))))
-                    (insert "\n\n"))
-                (when (or (not (stringp ollama-buddy-cloud-session-token))
-                          (string-empty-p ollama-buddy-cloud-session-token))
-                  (insert "  (Set ollama-buddy-cloud-session-token for usage stats)\n\n")))))
+
           (dolist (model ollama-buddy-cloud-models)
             (let* ((display-model (ollama-buddy--get-full-cloud-model-name model))
                    (letter (ollama-buddy--get-model-letter display-model)))

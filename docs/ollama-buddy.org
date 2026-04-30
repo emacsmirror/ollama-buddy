@@ -246,7 +246,9 @@ language models (LLMs) directly within your Emacs workflow.
   - [[#Automatic-Manifest-Pulling][16.5 Automatic Manifest Pulling]]
   - [[#Cloud-Model-Indicator][16.6 Cloud Model Indicator]]
   - [[#Cloud-Usage-Stats][16.7 Cloud Usage Stats]]
-  - [[#Configuration-3][16.8 Configuration]]
+  - [[#OpenCode-Go][16.8 OpenCode Go]]
+    - [[#OpenCode-Go-Usage-Stats][16.8.1 OpenCode Go Usage Stats]]
+  - [[#Configuration-3][16.9 Configuration]]
 - [[#Launching-External-Frontends][17 Launching External Frontends]]
   - [[#Overview-5][17.1 Overview]]
   - [[#Usage-1][17.2 Usage]]
@@ -4412,6 +4414,7 @@ Buddy]]   [[[#SEC_Contents][Contents]]][[[#Index][Index]]]
 - [[#Automatic-Manifest-Pulling][Automatic Manifest Pulling]]
 - [[#Cloud-Model-Indicator][Cloud Model Indicator]]
 - [[#Cloud-Usage-Stats][Cloud Usage Stats]]
+- [[#OpenCode-Go][OpenCode Go]]
 - [[#Configuration-3][Configuration]]
 
 <<Overview-4>>
@@ -4549,8 +4552,44 @@ If usage stats stop appearing, the =__Secure-session= cookie may have
 changed. Re-copy the fresh value from your browser and update
 =ollama-buddy-cloud-session-token=.
 
+--------------
+
+<<OpenCode-Go>>
+Up: [[#Ollama-Cloud-Models][Ollama Cloud Models]]  
+[[[#SEC_Contents][Contents]]][[[#Index][Index]]]
+
+*** 16.8 OpenCode Go [[#OpenCode-Go-1][¶]]
+:PROPERTIES:
+:CUSTOM_ID: OpenCode-Go-1
+:CLASS: section
+:END:
+=ollama-buddy-opencode.el= provides integration with the OpenCode Go
+flat-rate subscription.
+
+- [[#OpenCode-Go-Usage-Stats][OpenCode Go Usage Stats]]
+
+<<OpenCode-Go-Usage-Stats>>
+**** 16.8.1 OpenCode Go Usage Stats [[#OpenCode-Go-Usage-Stats][¶]]
+:PROPERTIES:
+:CUSTOM_ID: opencode-go-usage-stats
+:CLASS: subsection
+:END:
+If =ollama-buddy-opencode= is loaded, the Model Management page
+(=C-c M=) can also display your Go subscription usage. To enable this,
+you must set your unique workspace URL and your session cookie:
+
+1. Set =ollama-buddy-opencode-usage-url= to your workspace Go page URL
+   (e.g. =https://opencode.ai/workspace/wrk_.../go=).
+2. Sign in at [[https://opencode.ai]] and copy the =auth= cookie value
+   from browser DevTools (Application/Storage > Cookies).
+3. Set =ollama-buddy-opencode-session-token= to this value.
+
+Like Ollama Cloud, the OpenCode =auth= cookie may rotate upon
+re-authentication. If usage stats stop appearing, re-copy the fresh
+value from your browser.
+
 <<Configuration-3>>
-*** 16.8 Configuration [[#Configuration-3][¶]]
+*** 16.9 Configuration [[#Configuration-3][¶]]
 :PROPERTIES:
 :CUSTOM_ID: configuration-1
 :CLASS: section
