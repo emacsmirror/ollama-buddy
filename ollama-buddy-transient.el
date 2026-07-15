@@ -498,6 +498,7 @@ Uses a cached result when command definitions have not changed."
 Rebuilds the transient prefix each invocation to reflect the
 current role's `ollama-buddy-command-definitions'."
   (interactive)
+  (require 'ollama-buddy)
   (let* ((group-vectors (ollama-buddy--role-menu-build-groups))
          (selection-status (ollama-buddy--selection-status))
          (toggle-label (if (bound-and-true-p ollama-buddy-in-buffer-replace)

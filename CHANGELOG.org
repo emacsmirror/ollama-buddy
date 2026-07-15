@@ -11,6 +11,14 @@ project's main git repository: [[https://github.com/captainflasmr/ollama-buddy
 
 * Versions
 
+** <2026-07-15 Wed> *7.6.1*
+
+Fix =void-function ollama-buddy--open-chat= when the chat is opened from the role transient menu before the main package is loaded.
+
+*** Bug Fixes
+
+- *Role transient menu did not load the main package* -- =ollama-buddy-role-transient-menu= is autoloaded from =ollama-buddy-transient= (not =ollama-buddy=), so a =use-package :bind= setup that only binds that command never loads =ollama-buddy.el=.  The transient module forward-declares =ollama-buddy--open-chat= via =declare-function=, which satisfies the byte-compiler but does not define the function at run time, so selecting "Open Chat" signalled =Symbol's function definition is void: ollama-buddy--open-chat=.  =ollama-buddy-role-transient-menu= now calls =(require 'ollama-buddy)= before building the menu, matching the existing =ollama-buddy-transient-menu-wrapper= pattern.  Reported in [[https://github.com/captainflasmr/ollama-buddy/issues/24][#24]].
+
 ** <2026-06-22 Mon> *7.6.0*
 
 Dynamic cloud model discovery — the static =ollama-buddy-cloud-models= list is replaced with automatic fetching from ollama.com.
